@@ -5,7 +5,8 @@
 
 #define RFID_BAUD 115200		//Baud rate for RFID Module
 
-#define RFID_MODULE 1			//Rfid module used for reader1, 1:SL015M 2:RR10
+#define RFID_MODULE1 2			//Rfid module used for reader1, 1:SL015M 2:RR10
+#define RFID_MODULE2 2			//Rfid module used for reader1, 1:SL015M 2:RR10
 
 #define SDVX_VOL_SENS 7        //Sensitivity for SDVX Volume buttons
 

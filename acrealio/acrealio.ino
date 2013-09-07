@@ -49,7 +49,7 @@ void setup()
   Reader* read1 = new Reader();
   
   //rfid module, 2 modules model are supported, configure the module to use
-  switch(RFID_MODULE)
+  switch(RFID_MODULE1)
   {
     case 1:
     {
@@ -101,10 +101,23 @@ void setup()
       read2->setrCode("ICCA",true);
       read2->setkeypadpins(K2_A,K2_B,K2_C,K2_1,K2_2,K2_3,K2_4);//3cols,4rows
       //rfid module
-      SL015M* mod2  = new SL015M();
-      mod2->setPins(R2_DET,&R2_SER);
-      read2->setRfidModule(mod2);
-      nodes[1] = read2;
+      switch(RFID_MODULE2)
+      {
+        case 1:
+        {
+            SL015M* mod2 = new SL015M();
+            mod2->setPins(R2_DET,&R2_SER);
+            read2->setRfidModule(mod2);
+            break;
+        }
+        case 2:
+        {
+            RR10* mod2 = new RR10();
+            mod2->setPins(&R2_SER);
+            read2->setRfidModule(mod2);
+            break;
+        }
+      }
     }
 	
     case 1: //1 Reader game, set reader 1 as node 1
