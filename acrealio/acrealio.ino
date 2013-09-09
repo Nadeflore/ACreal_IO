@@ -2,7 +2,6 @@
 #include "Reader.h"
 #include "LedBoard.h"
 #include "IoBoard.h"
-#include "SerialNode.h"
 #include "CardDispenser.h"
 #include "RR10.h"
 #include "SL015M.h"
@@ -15,14 +14,11 @@
 ///////////////////////////
 // Serial protocol with host
 ///////////////////////////
-byte request[256];                // buffer filles with request bytes from host
+byte request[256];                // buffer filled with request bytes from host
 byte req_i = 0;                    // request buffer current size
 
 boolean escByte = false;          // flag to indicate next byte is an escaped byte
-boolean requestprocessed = false; // indicate whether request has been processed or not
 boolean initDone = false;         // indicate whether init has been done
-
-int nb00=0; // number of 0x00 received in a row
 
 //timestamps
 unsigned long lastSent;   
@@ -32,7 +28,8 @@ unsigned long lastRecv;
 // Nodes properties
 //////////////////////
 
-short nbnodes; // nodes count (currently supports 1 or 2)
+byte nbnodes; // nodes count (currently supports 1 or 2)
+byte node_id; //id of first node (may be != 1 when used with other physical nodes)
 
 Node *nodes[MAX_NODES];
 
@@ -40,6 +37,7 @@ Node *nodes[MAX_NODES];
 //
 // Arduino setup, run once at startup
 // Init nodes depending on gametype
+// feel free to change this code to get the nodes that suits your needs
 //
 void setup()
 {
@@ -142,7 +140,7 @@ void setup()
    
   }
   
-	//set number of nodes present
+	//set how many nodes are emulated by this board
     if(gametype == 1)
 		nbnodes = 1;
 	else
@@ -159,7 +157,7 @@ void loop()
   if(initDone){
     for(int r=0;r<nbnodes;r++)
     {
-      nodes[r]->update();//update every node
+      nodes[r]->update();//update each node
     }
 
     if((millis() - lastRecv) > 50000){      // If no comm for 50sec, timeout
@@ -184,24 +182,7 @@ void loop()
 //Arduino serialEvent(), called each time a byte is received on Serial
 //
 void serialEvent(){
-  
-  //switch to unintialized state when receiving lots of zeros
-  
-  if(Serial.peek() == 0x00)
-     nb00++;
-  else
-    nb00=0;
     
-  if(nb00 > 128)
-  {
-      initDone = false;                     // Reset init
-      //digitalWrite(13, LOW);
-      Serial.end();                         // and close serial port
-  }
-  
-  
-  
-  
   
     if(initDone)
     {
@@ -209,13 +190,21 @@ void serialEvent(){
       
       if(isRequestComplete())
       {
-        if(checkRequestChecksum() && !requestprocessed)
+        if(checkRequestChecksum() )
         {
-          if(request[0] == 0 && request[2] == 0x01) // cmd 0x01 is a special command requesting the number of nodes present
-            sendNodeNb();
+          //a correct command have been received and needs to be processed
+          
+          if(request[0] == 0x00 && request[2] == 0x01) // node enumeration command
+            nodeEnum();
           else
-            forwardRequest();
+          {
+            if(request[0] >= node_id  && request[0] < node_id+nbnodes)//command recipient is one of our nodes
+              processRequest();
+            else //if it's not for us, (cmd aimed at another node or at the host) send it to next node
+              forwardRequest();
+          }
         
+          req_i = 0; //empty request buffer
         }
       }
     }
@@ -224,12 +213,13 @@ void serialEvent(){
 
 
 //
-// Send answer to the 0x01 "how many nodes" cmd
+// process node enumeration command
 //
-void sendNodeNb()
+void nodeEnum()
 {
-  byte answer[7] = {0x00,0x00,0x01,request[3],0x01,nbnodes,0xFF};
-  sendAnswer(answer);
+  node_id = request[5] + 1; //first node id is previous node id + 1
+  request[5] += nbnodes; //increment node count by how many nodes this board emulate.
+  sendAnswer(request); // send command to the next node
 }
 
 
@@ -258,8 +248,7 @@ void getRequest()
     {
       if(req_i == 0)
         Serial.write(0xAA);               // send back AA if previous byte was AA too (init sequence)
-        
-      requestprocessed = false;
+      
       escByte = false;
       req_i = 0;                          // clear request buffer
     }
@@ -319,15 +308,25 @@ boolean checkRequestChecksum()
 }
 
 //
-// Forward Request to specified Node send back the answer
+// get the specified Node to process the request send back the answer
 //
-void forwardRequest(){
-  Node *rd = nodes[request[0]-1];
+void processRequest(){
+  Node *rd = nodes[request[0] - node_id];//get the node to which the command is adressed
   byte answer[256];
-  rd->processRequest(request, answer);
+  rd->processRequest(request, answer);//have it process the request
   sendAnswer(answer);
 
 }
+
+
+//
+// when a command is not for any of our nodes, send it to next node as is
+//
+void forwardRequest(){
+  sendAnswer(request);
+}
+
+
 
 //
 // Send answer
@@ -377,7 +376,6 @@ void sendAnswer(byte* answer)
   }
   
   lastSent = millis();
-  requestprocessed = true;
 
   
 }
