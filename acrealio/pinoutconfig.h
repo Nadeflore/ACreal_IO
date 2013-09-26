@@ -1,7 +1,7 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#define gametype 1               //0:pop'n with card dispenser 1: pop'n, drummania(1 reader) 2:iidx/ddr/gf(2readers) 3:jubeat (1reader+Ledboard) 4: sdvx (1reader+ioboard)
+#define GAMETYPE 1               //0:pop'n with card dispenser 1: pop'n, drummania(1 reader) 2:iidx/ddr/gf(2readers) 3:jubeat (1reader+Ledboard) 4: sdvx (1reader+ioboard)
 
 #define RFID_BAUD 115200		//Baud rate for RFID Module
 

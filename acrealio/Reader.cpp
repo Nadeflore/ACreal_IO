@@ -11,7 +11,7 @@ Reader::Reader()
 }
 
 //cmd61 is used to specify behaviour on command 0x61
-void Reader::setrCode(char* rCode, boolean cmd61_s)
+void Reader::setrCode(char* rCode, byte cmd61_s)
 {
     setVersion((byte[]) {0x03, 0x00, 0x00, 0x00}, 0x00, (byte[]) {0x01, 0x06, 0x00}, rCode);
     cmd61 = cmd61_s;
@@ -191,7 +191,7 @@ void Reader::getStatus(byte* buf)
          buf[1] = 0x10;
         }
         else{
-          buf[0] = 0x04;
+          buf[0] = 0x01;
         }
       }
     
@@ -253,7 +253,7 @@ short Reader::processRequest(byte* request, byte* answer)
         if(rfmodule->isCardPresent())
         {
          answer[6] = 0x10; // light up front sensor (just in case)
-         answer[5] = 0x01; // if 2 -> action loop on 31 (if 0 too btw)
+         answer[5] = 0x01; // if 2 -> action loop on 31
         }
               
     break;
@@ -316,11 +316,21 @@ short Reader::processRequest(byte* request, byte* answer)
     new_reader = true; //only new readers issue this command
     
     rfmodule->read();    
-    
-     if(cmd61)// for pop'n music and jubeat, should not return any data, for iidx and sdvx, should return one byte of data with value 0x01
+      
+    // for pop'n music, should not return any data, for iidx and sdvx, should return one byte of data with value 0x01 for jubeat, should return at least 2 data (something seems wrong here)
+     switch(cmd61)
      {
+       case 1:
         answer[4] = 1;
         answer[5] = 0x01;
+        break;
+       case 2:
+        answer[4] = 2;
+        answer[5] = 0x00;
+        answer[6] = 0x00;
+        break;
+      default:
+        answer[4] = 0;
      }
      
      

@@ -31,7 +31,56 @@ unsigned long lastRecv;
 byte nbnodes; // nodes count (currently supports 1 or 2)
 byte node_id; //id of first node (may be != 1 when used with other physical nodes)
 
-Node *nodes[MAX_NODES];
+Node *nodes[MAX_NODES];//nodes array
+
+//nodes delaraction (static allocation)
+
+#if GAMETYPE == 0  //pop'n music with card dispenser
+
+Reader nod1;//first reader 
+CardDispenser nod2("PCDA"); //card dispenser
+
+#elif GAMETYPE == 1 //1 reader
+
+Reader nod1;//first reader 
+
+#elif GAMETYPE == 2 //2 readers
+
+Reader nod1;//first reader 
+
+Reader nod2;//second reader 
+
+#elif GAMETYPE == 3 // reader + leboard
+
+Reader nod1;//first reader 
+LedBoard nod2("LEDB");//led board
+
+#else // reader + ioboard
+
+Reader nod1;//first reader 
+IoBoard nod2("KFCA");//io board
+
+#endif
+
+
+//1P rfid module allocation
+
+#if RFID_MODULE1 == 1
+SL015M mod1;
+#else
+RR10 mod1;
+#endif
+
+
+
+//2P rfid module allocation
+#if GAMETYPE == 2
+#if RFID_MODULE2 == 1
+SL015M mod2;
+#else
+RR10 mod2;
+#endif
+#endif
 
 
 //
@@ -41,110 +90,68 @@ Node *nodes[MAX_NODES];
 //
 void setup()
 {
-  // init nodes depending on game type
+  // set nodes configuration
   
-  // init first reader used in all games types
-  Reader* read1 = new Reader();
+  //set first rfid module
+  mod1.setPins(R1_DET,&R1_SER);
+  nod1.setRfidModule(&mod1);
   
-  //rfid module, 2 modules model are supported, configure the module to use
-  switch(RFID_MODULE1)
-  {
-    case 1:
-    {
-        SL015M* mod1 = new SL015M();
-        mod1->setPins(R1_DET,&R1_SER);
-        read1->setRfidModule(mod1);
-        break;
-    }
-    case 2:
-    {
-        RR10* mod1 = new RR10();
-        mod1->setPins(&R1_SER);
-        read1->setRfidModule(mod1);
-        break;
-    }
-  }
-    
-      
-  switch(gametype)
-  {
-    case 4: //Sound voltex, set an IoBoard + a Reader
-    {
-      //1st node IOBOARD
-      IoBoard* iob = new IoBoard("KFCA");
-      nodes[1] = iob;
-      
-      //2nd node reader 
-      read1->setrCode("ICCA",true);
-        //keypad
-        read1->setkeypadpins(K1_A,K1_B,K1_C,K1_1,K1_2,K1_3,K1_4);//3cols,4rows
-     
-      nodes[0] = read1;
-      break;
-    }
-    
-    
-    case 3://jubeat, set a reader (without keypad) + a LedBoard
-    {
-      read1->setrCode("ICCB");
-      
-      nodes[0] = read1;
-      nodes[1] = new LedBoard("LED"); // jubeat ledboard node
-      
-      break;
-    }
-    case 2://2readers game, Set reader 2 as node 2
-    {
-      Reader* read2 = new Reader();
-      read2->setrCode("ICCA",true);
-      read2->setkeypadpins(K2_A,K2_B,K2_C,K2_1,K2_2,K2_3,K2_4);//3cols,4rows
-      //rfid module
-      switch(RFID_MODULE2)
-      {
-        case 1:
-        {
-            SL015M* mod2 = new SL015M();
-            mod2->setPins(R2_DET,&R2_SER);
-            read2->setRfidModule(mod2);
-            break;
-        }
-        case 2:
-        {
-            RR10* mod2 = new RR10();
-            mod2->setPins(&R2_SER);
-            read2->setRfidModule(mod2);
-            break;
-        }
-      }
-    }
-	
-    case 1: //1 Reader game, set reader 1 as node 1
-    {
-       read1->setrCode("ICCA",gametype == 2);
-       //keypad
-       read1->setkeypadpins(K1_A,K1_B,K1_C,K1_1,K1_2,K1_3,K1_4);//3cols,4rows
-       nodes[0] = read1;
-       break;
-    }
-    case 0: // pop'n music with card dispenser, 1 reader + 1 card dispenser
-    {
-       read1->setrCode("ICCA");
-         //keypad
-       read1->setkeypadpins(K1_A,K1_B,K1_C,K1_1,K1_2,K1_3,K1_4);//3cols,4rows
-       nodes[0] = read1;
-       nodes[1] = new CardDispenser("PCDA");
-       
-       break;
-    }
-     
+#if GAMETYPE == 0  //pop'n music with card dispenser
+
+   nod1.setrCode("ICCA",0);
+   nod1.setkeypadpins(K1_A,K1_B,K1_C,K1_1,K1_2,K1_3,K1_4);//3cols,4rows
+   nodes[0] = &nod1;
+   nodes[1] = &nod2;
    
-  }
-  
-	//set how many nodes are emulated by this board
-    if(gametype == 1)
-		nbnodes = 1;
-	else
-		nbnodes = 2;
+   nbnodes = 2;
+
+#elif GAMETYPE == 1 //1 reader
+
+   nod1.setrCode("ICCA",0);
+   nod1.setkeypadpins(K1_A,K1_B,K1_C,K1_1,K1_2,K1_3,K1_4);//3cols,4rows
+   nodes[0] = &nod1;
+   
+   nbnodes = 1;
+
+#elif GAMETYPE == 2 //2 readers
+   //1p reader
+   nod1.setrCode("ICCA",1);
+   nod1.setkeypadpins(K1_A,K1_B,K1_C,K1_1,K1_2,K1_3,K1_4);//3cols,4rows
+   nodes[0] = &nod1;
+   
+   //set rfid module 2
+   mod2.setPins(R2_DET,&R2_SER);
+   nod2.setRfidModule(&mod2);
+   
+   //2p reader
+   nod2.setrCode("ICCA",1);
+   nod2.setkeypadpins(K2_A,K2_B,K2_C,K2_1,K2_2,K2_3,K2_4);//3cols,4rows
+   nodes[1] = &nod2;
+   
+   nbnodes = 2;
+
+#elif GAMETYPE == 3 // reader + leboard
+
+   nod1.setrCode("ICCB",2);
+   nodes[0] = &nod1;
+   nodes[1] = &nod2;
+   
+   nbnodes = 2;
+   
+
+#else // reader + ioboard
+
+   //1p reader
+   nod1.setrCode("ICCA",1);
+   nod1.setkeypadpins(K1_A,K1_B,K1_C,K1_1,K1_2,K1_3,K1_4);//3cols,4rows
+   nodes[0] = &nod1;
+   nodes[1] = &nod2;
+   
+   nbnodes = 2;
+
+#endif
+
+
 	
 
 }
@@ -348,7 +355,7 @@ void sendAnswer(byte* answer)
    //checksum calc done, let's send it
    
    //delay if needed
-  if(gametype !=4) //delay only if game is not sound voltex
+  if(GAMETYPE !=4) //delay only if game is not sound voltex
   { 
     unsigned long now = millis();
     if((now - lastSent) < MINTIME && (now - lastSent) > 0)   // Check If last packet was too early

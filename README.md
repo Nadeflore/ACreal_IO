@@ -19,6 +19,8 @@ iidx 19-20 (2 new wavepass readers)
 
 jubeat 1 - knit (one old slotted reader (no keypad) + one led board (game won't boot if the led board is not present) 
 
+jubeat copious - saucer (one new reader (no keypad) + one led board (game won't boot if the led board is not present) 
+
 DDR (2 old readers in sd, 2 new readers in HD)
 
 drum mania (1 old reader)

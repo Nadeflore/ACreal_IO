@@ -24,7 +24,6 @@ void LedBoard::init()
 
 void LedBoard::update()
 {
-	
 }
 
 

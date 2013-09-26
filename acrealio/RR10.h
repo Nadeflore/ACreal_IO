@@ -8,7 +8,7 @@ class RR10 : public RfidModule
 {
 public:
     RR10();
-    void setPins(HardwareSerial* serialid);
+    void setPins(int sensor, HardwareSerial* serialid);
     void read();
     void update();	
     boolean isCardPresent();

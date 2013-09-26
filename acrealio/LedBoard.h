@@ -12,6 +12,6 @@ public:
 public: 
  
 private:
-	byte ledStatus[];
+	byte ledStatus[18];
 
 };

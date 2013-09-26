@@ -10,7 +10,7 @@ class Reader : public Node
 {
 public:
     Reader(); //contructor
-    void setrCode(char* rCode, boolean cmd61 = false);
+    void setrCode(char* rCode, byte cmd61 = 0);
     void init();
     void update(); //update things like keypadstate and rfid 
 	
@@ -39,7 +39,7 @@ private:
     short colPins[3];           // matrix has 3 cols...
     short rowPins[4];           // ...and 4 rows
     
-    boolean cmd61; //used to specify behaviour on command 0x61
+    byte cmd61; //used to specify behaviour on command 0x61
     boolean new_reader; //set to true in case new wave pass card reader behaviour is requested from game
     Cipher crypt; 
     

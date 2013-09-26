@@ -10,7 +10,7 @@ RR10::RR10()
   pinset = false;
 }
 
-void RR10::setPins(HardwareSerial* serialid)
+void RR10::setPins(int sensor, HardwareSerial* serialid)
 {
     rfSerial = serialid;
     rfSerial->begin(115200); //the only possible baud rate for this module
