@@ -11,11 +11,11 @@ public:
     void setPins(int sensor, HardwareSerial* serialid);
     void read();
 	void update();	
-    boolean isCardPresent();
+    byte isCardPresent();
     void getUID(byte* uid);	
 
 private:
-    boolean card;               // card presence
+    byte card;               // card presence
     byte uid[8];
     boolean rfcmdsent;
     unsigned long timesent;

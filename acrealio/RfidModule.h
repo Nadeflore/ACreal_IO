@@ -10,7 +10,7 @@ public:
     virtual void setPins(int sensor, HardwareSerial* serialid);
     virtual void read();
     virtual void update();	
-    virtual boolean isCardPresent();
+    virtual byte isCardPresent();
     virtual void getUID(byte* uid);	
 };
 

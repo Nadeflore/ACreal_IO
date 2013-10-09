@@ -5,11 +5,12 @@
 #include "CardDispenser.h"
 #include "RR10.h"
 #include "SL015M.h"
+#include "Ddr.h"
 
 
 
 #define MINTIME 14                // Min time between 2 sent packet(Min is 14ms, Max is around 50ms) some games require this
-#define MAX_NODES 2
+#define MAX_NODES 3
 
 ///////////////////////////
 // Serial protocol with host
@@ -55,10 +56,19 @@ Reader nod2;//second reader
 Reader nod1;//first reader 
 LedBoard nod2("LEDB");//led board
 
-#else // reader + ioboard
+#elif GAMETYPE == 4 // reader + ioboard
 
 Reader nod1;//first reader 
 IoBoard nod2("KFCA");//io board
+
+#else //2 readers + DDR LED board ?
+
+Reader nod1;//first reader 
+
+Reader nod2;//second reader
+
+Ddr nod3;
+
 
 #endif
 
@@ -74,7 +84,7 @@ RR10 mod1;
 
 
 //2P rfid module allocation
-#if GAMETYPE == 2
+#if GAMETYPE == 2 || GAMETYPE == 5
 #if RFID_MODULE2 == 1
 SL015M mod2;
 #else
@@ -139,7 +149,7 @@ void setup()
    nbnodes = 2;
    
 
-#else // reader + ioboard
+#elif GAMETYPE == 4 // reader + ioboard
 
    //1p reader
    nod1.setrCode("ICCA",1);
@@ -148,6 +158,27 @@ void setup()
    nodes[1] = &nod2;
    
    nbnodes = 2;
+   
+#else // 2readers + DDR ??? board
+
+   //1p reader
+   nod1.setrCode("ICCB",0);
+   nod1.setkeypadpins(K1_A,K1_B,K1_C,K1_1,K1_2,K1_3,K1_4);//3cols,4rows
+   nodes[0] = &nod1;
+   
+   //set rfid module 2
+   mod2.setPins(R2_DET,&R2_SER);
+   nod2.setRfidModule(&mod2);
+   
+   //2p reader
+   nod2.setrCode("ICCB",0);
+   nod2.setkeypadpins(K2_A,K2_B,K2_C,K2_1,K2_2,K2_3,K2_4);//3cols,4rows
+   nodes[1] = &nod2;
+   
+   nodes[2] = &nod3;
+   
+   nbnodes = 3;
+
 
 #endif
 

@@ -160,20 +160,26 @@ void Reader::getStatus(byte* buf)
       
     //card presence flags (different behaviour on old and new readers)
     buf[0] = 0x04; // card presence (1 or 4 :no card, 2 :card)
-    buf[1] = 0x00; //sensors (for old readers)
+    buf[1] = 0x00; //sensors for old readers (front 0x10, back 0x20) or card type for new readers (0 : iso15696 1:felica) 
     
     if(new_reader)
     {
           if(rfmodule->isCardPresent())
+          {
             buf[0]=0x02;
+            buf[1] = rfmodule->isCardPresent() -1 ;
+          }
           else
+          {
             buf[0]=0x04;
+          }
+            
     }
     else
     {
       
       // old readers sensors emulation
-      if(acceptcard && rfmodule->isCardPresent())//if reader is accepting cards and a card is detected, simulate old reader holding card
+      if(acceptcard && rfmodule->isCardPresent() == 1)//if reader is accepting cards and a card is detected, simulate old reader holding card
       {
         holdcard = true;
       } 
@@ -185,7 +191,7 @@ void Reader::getStatus(byte* buf)
       }
       else
       {
-        if(rfmodule->isCardPresent())//if card is present, but reader is not accepting card, just set the front sensor
+        if(rfmodule->isCardPresent() == 1)//if card is present, but reader is not accepting card, just set the front sensor
         {
          buf[0] = 0x02;
          buf[1] = 0x10;
@@ -236,6 +242,10 @@ short Reader::processRequest(byte* request, byte* answer)
     case 0x16:
     case 0x20:
     case 0x30:
+    
+    //re-init (if game is changed)
+    new_reader = false;
+    
       answer[4] = 1;
       answer[5] = 0x00;
       break;
@@ -250,7 +260,7 @@ short Reader::processRequest(byte* request, byte* answer)
       answer[4] = 0x10;               // 16 bytes of data
       //setStatus();
       answer[5] = 0x01;
-        if(rfmodule->isCardPresent())
+        if(rfmodule->isCardPresent() == 1)
         {
          answer[6] = 0x10; // light up front sensor (just in case)
          answer[5] = 0x01; // if 2 -> action loop on 31
@@ -317,7 +327,7 @@ short Reader::processRequest(byte* request, byte* answer)
     
     rfmodule->read();    
       
-    // for pop'n music, should not return any data, for iidx and sdvx, should return one byte of data with value 0x01 for jubeat, should return at least 2 data (something seems wrong here)
+    // for pop'n music and DDR, should not return any data, for iidx and sdvx, should return one byte of data with value 0x01 and for jubeat, should return something like a full status  (0x31 like)   ... wtf konami
      switch(cmd61)
      {
        case 1:
@@ -325,8 +335,8 @@ short Reader::processRequest(byte* request, byte* answer)
         answer[5] = 0x01;
         break;
        case 2:
-        answer[4] = 2;
-        answer[5] = 0x00;
+        answer[4] = 0x10;//16 bytes of data
+        answer[5] = 0x00;//no card
         answer[6] = 0x00;
         break;
       default:

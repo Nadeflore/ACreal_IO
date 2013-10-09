@@ -3,7 +3,7 @@
 
 SL015M::SL015M()
 {
-  card = false;
+  card = 0;
   rfcmdsent = false;
   rf_i = 0;
   pinset = false;
@@ -88,9 +88,9 @@ void SL015M::update()
                     }
             
                     if(uid[0] == 0xE0 && uid[1] == 0x04)  // if correct konami card
-                      card = true;
+                      card = 1;
                     else
-                      card = false;
+                      card = 0;
                       
                     readcmd = false;//reading finished (card found)
 
@@ -109,7 +109,7 @@ void SL015M::update()
     }
     else // if no tag in range
     {
-        card = false;
+        card = 0;
         rfcmdsent = false;
         readcmd = false;//reading finished (no card found)
     }
