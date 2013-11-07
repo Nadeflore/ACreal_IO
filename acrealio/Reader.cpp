@@ -142,17 +142,22 @@ void Reader::getStatus(byte* buf)
   
     // set status in buffer
 
-
-
-    // if a card is present, copy its uid
-    if(rfmodule->isCardPresent()){
-        rfmodule->getUID(buf+2);
-      } else {
-        for(int i=0;i<8;i++)
-        {
-          buf[2+i] = 0x00;
+    if(holdcard) //when simulating card holding, use stored uid
+    {
+      memcpy(buf+2,uid,8);
+    }
+    else
+    {
+      // if a card is present, copy its uid
+      if(rfmodule->isCardPresent()){
+          rfmodule->getUID(buf+2);
+        } else {
+          for(int i=0;i<8;i++)
+          {
+            buf[2+i] = 0x00;
+          }
         }
-      }
+    }
       
       
       
@@ -181,7 +186,8 @@ void Reader::getStatus(byte* buf)
       // old readers sensors emulation
       if(acceptcard && rfmodule->isCardPresent() == 1)//if reader is accepting cards and a card is detected, simulate old reader holding card
       {
-        holdcard = true;
+        holdcard = true; //until card is ejected, we'll ignore new cards and simulate this card being hold in the reader
+        rfmodule->getUID(uid); // copy the current card uid
       } 
       
       if(holdcard) //when holding card, both sensors are on and card is present
@@ -300,6 +306,17 @@ short Reader::processRequest(byte* request, byte* answer)
       
 
       break;
+      
+      
+      
+    // sleep mode
+    case 0x3A:
+      answer[4] = 0x01;              
+      answer[5] = 0x00;
+      
+      
+
+    break;
 
     //
     // key exchange (for popn new wavepass readers)

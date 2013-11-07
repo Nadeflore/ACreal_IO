@@ -32,7 +32,6 @@ private:
     byte rfidp[256];            // rfid response buffer
     byte rf_i;         //response buffer size
 
-    //(who needs enum type ?)
 };
 
 #endif

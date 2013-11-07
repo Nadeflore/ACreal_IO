@@ -24,14 +24,14 @@ public:
     virtual void getStatus(byte* buf);
     void readRfid();
 
-public:
+private:
     boolean acceptcard;         // reader state, accepting cards or not (for emulating old readers)
     boolean holdcard;           // reader state, holding card or not (for emulating old readers)
+    byte uid[8];                // store uid of holding card (for emulating old readers)
     
     
-private:
-	boolean keypadInitDone;
 
+    boolean keypadInitDone;
     word keypad;                // keys currently pressed
     word keypad_old;            // keys pressed before last read
     byte keydown;               // used to indicated rising edge on keys

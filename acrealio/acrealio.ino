@@ -68,7 +68,7 @@ Reader nod1;//first reader
 Reader nod2;//second reader
 
 Ddr nod3;
-
+//LedBoard nod3("LEDB");//led board
 
 #endif
 
