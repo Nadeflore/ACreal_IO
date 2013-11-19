@@ -423,14 +423,14 @@ void sendAnswer(byte* answer)
 //
 long detRate()
 {
-   long baudrates[] = {38400, 57600};//baudrates to try
+  long baudrates[] = {57600,38400,19200};//baudrates to try
   int i=0;
   boolean allAA;
   
   do  //for each baud rate
   {
    i++;
-   if(i>1)
+   if(i> (sizeof(baudrates)/sizeof(baudrates[0])) -1 )
      i=0;
    //flush in and out buffer
    while(Serial.available())
