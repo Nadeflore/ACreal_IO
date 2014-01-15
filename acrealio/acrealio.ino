@@ -39,7 +39,7 @@ Node *nodes[MAX_NODES];//nodes array
 #if GAMETYPE == 0  //pop'n music with card dispenser
 
 Reader nod1;//first reader 
-CardDispenser nod2("PCDA"); //card dispenser
+CardDispenser nod2("HBHI"); //card dispenser
 
 #elif GAMETYPE == 1 //1 reader
 

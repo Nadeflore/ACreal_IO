@@ -263,14 +263,10 @@ short Reader::processRequest(byte* request, byte* answer)
     rfmodule->read();
     
     
-      answer[4] = 0x10;               // 16 bytes of data
-      //setStatus();
+      answer[4] = 0x10;    // 16 bytes of data
+      getStatus(answer+5);
       answer[5] = 0x01;
-        if(rfmodule->isCardPresent() == 1)
-        {
-         answer[6] = 0x10; // light up front sensor (just in case)
-         answer[5] = 0x01; // if 2 -> action loop on 31
-        }
+      
               
     break;
     //
