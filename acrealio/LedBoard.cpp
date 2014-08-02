@@ -5,7 +5,10 @@
 //contructor
 LedBoard::LedBoard(char* rCode)
 {
-	  setVersion((byte[]) {0x04, 0x01, 0x00, 0x00}, 0x00, (byte[]) {0x01, 0x00, 0x00}, rCode);
+	  byte rType[] = {0x04, 0x00, 0x00, 0x01};
+          byte rVersion[] = {0x00, 0x00, 0x07};
+          
+          setVersion(rType , 0x00, rVersion, rCode);
 }
 
 void LedBoard::init()

@@ -110,8 +110,8 @@ void setup()
 
    nod1.setrCode("ICCA",0);
    nod1.setkeypadpins(K1_A,K1_B,K1_C,K1_1,K1_2,K1_3,K1_4);//3cols,4rows
-   nodes[0] = &nod1;
    nodes[1] = &nod2;
+   nodes[0] = &nod1;
    
    nbnodes = 2;
 

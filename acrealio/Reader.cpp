@@ -187,7 +187,7 @@ void Reader::getStatus(byte* buf)
       if(acceptcard && rfmodule->isCardPresent() == 1)//if reader is accepting cards and a card is detected, simulate old reader holding card
       {
         holdcard = true; //until card is ejected, we'll ignore new cards and simulate this card being hold in the reader
-        rfmodule->getUID(uid); // copy the current card uid
+        rfmodule->getUID(uid); // copy the current card uid so that we'll simulate card presence until card is released
       } 
       
       if(holdcard) //when holding card, both sensors are on and card is present
@@ -203,7 +203,7 @@ void Reader::getStatus(byte* buf)
          buf[1] = 0x10;
         }
         else{
-          buf[0] = 0x01;
+          buf[0] = 0x04;//no card, 0x01 or 0x04 varies from game
         }
       }
     
