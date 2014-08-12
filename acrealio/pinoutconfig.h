@@ -1,12 +1,48 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#define GAMETYPE 4               //0:pop'n with card dispenser 1: pop'n, drummania(1 reader) 2:iidx/ddr sd/gf(2readers) 3:jubeat (1reader+Ledboard) 4: sdvx (1reader+ioboard) 5: ddr hd (2readers + ??? board)
+#define GAMETYPE 0               //0:bishibashi/pop'n with card dispenser 1: pop'n, drummania(1 reader) 2:iidx/ddr sd/gf(2readers) 3:jubeat (1reader+Ledboard) 4: sdvx (1reader+ioboard) 5: ddr hd (2readers + ??? board)
 
 #define RFID_BAUD 115200		//Baud rate for RFID Module
 
 #define RFID_MODULE1 2			//Rfid module used for reader1, 1:SL015M 2:RR10
 #define RFID_MODULE2 2			//Rfid module used for reader2, 1:SL015M 2:RR10
+
+//bishibashi controls
+
+#define BB_COIN A12
+#define BB_SERVICE A13
+#define BB_TEST A14
+#define BB_P1_RED A0
+#define BB_P1_GREEN A1
+#define BB_P1_BLUE A2
+#define BB_P1_YELLOW A3
+#define BB_P2_RED A4
+#define BB_P2_GREEN A5
+#define BB_P2_BLUE A6
+#define BB_P2_YELLOW A7
+#define BB_P3_RED A8
+#define BB_P3_GREEN A9
+#define BB_P3_BLUE A10
+#define BB_P3_YELLOW A11
+
+//bishi bashi lights
+
+#define BB_P1_LT_RED 40
+#define BB_P1_LT_GREEN 41
+#define BB_P1_LT_BLUE 42
+#define BB_P1_LT_YELLOW 43
+#define BB_P2_LT_RED 44
+#define BB_P2_LT_GREEN 45
+#define BB_P2_LT_BLUE 46
+#define BB_P2_LT_YELLOW 47
+#define BB_P3_LT_RED 48
+#define BB_P3_LT_GREEN 49
+#define BB_P3_LT_BLUE 50
+#define BB_P3_LT_YELLOW 51
+
+
+
 
 #define SDVX_VOL_SENS 7        //Sensitivity for SDVX Volume buttons
 
