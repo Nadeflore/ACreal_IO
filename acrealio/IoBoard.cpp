@@ -6,7 +6,9 @@ byte lightPin[] = {LT_START, LT_A, LT_B, LT_C, LT_D, LT_FXL, LT_FXR};
 //contructor
 IoBoard::IoBoard(char* rCode)
 {
-    setVersion((byte[]) {0x09, 0x06, 0x00, 0x00}, 0x00, (byte[]) {0x01, 0x01, 0x00}, rCode);
+    byte rType[] = {0x09, 0x06, 0x00, 0x00};
+    byte rVersion[] = {0x01, 0x01, 0x00};
+    setVersion(rType, 0x00, rVersion, rCode);
     
     
       //pins for pushbuttons
