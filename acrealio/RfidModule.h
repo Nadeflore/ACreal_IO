@@ -9,9 +9,10 @@ class RfidModule
 public:
     virtual void setPins(int sensor, HardwareSerial* serialid);
     virtual void read();
-    virtual void update();	
+    virtual void update();
     virtual byte isCardPresent();
-    virtual void getUID(byte* uid);	
+    virtual void getUID(byte* uid);
 };
 
 #endif
+

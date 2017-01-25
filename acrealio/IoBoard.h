@@ -10,22 +10,23 @@ public:
     void init();
     short processRequest(byte* request, byte* sendBuff);
     void update();
-	
-public: 
- 
-private:
-	//pushbuttons
-	byte keys;
-	byte keysLights;
-    boolean test;
-	boolean svc;
-	//for volume encoders
-	int aVolRlast;
-	int bVolRlast;
-	unsigned int volR;
 
-	int aVolLlast;
-	int bVolLlast;
-	unsigned int volL;
+public:
+
+private:
+    //pushbuttons
+    byte keys;
+    byte keysLights;
+    boolean test;
+    boolean svc;
+    //for volume encoders
+    int aVolRlast;
+    int bVolRlast;
+    unsigned int volR;
+
+    int aVolLlast;
+    int bVolLlast;
+    unsigned int volL;
 
 };
+

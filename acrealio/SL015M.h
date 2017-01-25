@@ -10,9 +10,9 @@ public:
     SL015M();
     void setPins(int sensor, HardwareSerial* serialid);
     void read();
-	void update();	
+    void update();
     byte isCardPresent();
-    void getUID(byte* uid);	
+    void getUID(byte* uid);
 
 private:
     byte card;               // card presence
@@ -23,10 +23,11 @@ private:
     byte rf_i;         //response buffer size
     short rfSENSOR;             // rfid OUT pin
     HardwareSerial* rfSerial;    // rfid Serial
-    
+
     boolean pinset;
     boolean readcmd; // read request from host flag
 
 };
 
 #endif
+

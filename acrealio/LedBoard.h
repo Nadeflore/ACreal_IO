@@ -8,10 +8,11 @@ public:
     void init();
     short processRequest(byte* request, byte* sendBuff);
     void update();
-	
-public: 
- 
+
+public:
+
 private:
-	byte ledStatus[18];
+    byte ledStatus[18];
 
 };
+

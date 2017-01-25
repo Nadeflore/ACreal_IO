@@ -11,17 +11,18 @@ public:
 
     const char* getVersion();
     void setVersion(byte* rType, byte rFlag, byte* rVersion, char* rCode);
-	
+
     virtual short processRequest(byte* request, byte* sendBuff);
-    virtual void update(); //update things like keypadstate and rfid 
-        
-    
+    virtual void update(); //update things like keypadstate and rfid
+
+
 private:
-    
-	
-	
+
+
+
     char nodeVersion[0x2C];
 
 };
 
 #endif
+
