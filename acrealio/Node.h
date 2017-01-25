@@ -10,7 +10,7 @@ public:
     virtual void init();
 
     const char* getVersion();
-    void setVersion(byte* rType, byte rFlag, byte* rVersion, char* rCode);
+    void setVersion(byte* rType, byte rFlag, byte* rVersion, const char* rCode);
 
     virtual short processRequest(byte* request, byte* sendBuff);
     virtual void update(); //update things like keypadstate and rfid

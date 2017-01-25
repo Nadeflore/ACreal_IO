@@ -54,7 +54,7 @@
 
 
 //pins for card reader 1 keypad (colls ABC, rows 1234)
-/* 
+/*
 ### Keypad 3x4 Matrix ###
 
  (7)---(8)---(9)---> ROW 4
@@ -79,7 +79,7 @@ COL C  COL B  COL A
 
 
 //pins for card reader 1 RFID Module
-#define R1_DET 20 
+#define R1_DET 20
 #define R1_SER Serial1
 
 //pins for card reader 2 keypad (colls ABC, rows 1234)
@@ -97,3 +97,4 @@ COL C  COL B  COL A
 #define R2_SER Serial2
 
 #endif
+

@@ -5,7 +5,7 @@
 //
 // Construct node version
 //
-void Node::setVersion(byte* rType, byte rFlag, byte* rVersion, char* rCode)
+void Node::setVersion(byte* rType, byte rFlag, byte* rVersion, const char* rCode)
 {
     char compileDate[0x10] = __DATE__;
     char compileTime[0x10] = __TIME__;

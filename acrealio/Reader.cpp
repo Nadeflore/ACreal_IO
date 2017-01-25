@@ -11,7 +11,7 @@ Reader::Reader()
 }
 
 //cmd61 is used to specify behaviour on command 0x61
-void Reader::setrCode(char* rCode, byte cmd61_s)
+void Reader::setrCode(const char* rCode, byte cmd61_s)
 {
     byte rType[] = {0x03, 0x00, 0x00, 0x00};
     byte rVersion[] = {0x01, 0x06, 0x00};

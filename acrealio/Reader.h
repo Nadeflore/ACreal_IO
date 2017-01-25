@@ -10,7 +10,7 @@ class Reader : public Node
 {
 public:
     Reader(); //contructor
-    void setrCode(char* rCode, byte cmd61 = 0);
+    void setrCode(const char* rCode, byte cmd61 = 0);
     void init();
     void update(); //update things like keypadstate and rfid
 
