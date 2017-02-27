@@ -61,14 +61,13 @@ LedBoard nod2("LEDB");//led board
 Reader nod1;//first reader
 IoBoard nod2("KFCA");//io board
 
-#else //2 readers + DDR LED board ?
+#else //2 readers + DDR HDBX button board with Speaker RGB LEDs
 
 Reader nod1;//first reader
 
 Reader nod2;//second reader
 
-Ddr nod3;
-//LedBoard nod3("LEDB");//led board
+Ddr nod3; //HDXB board
 
 #endif
 
@@ -159,7 +158,7 @@ void setup()
 
     nbnodes = 2;
 
-#else // 2readers + DDR ??? board
+#else // 2readers + DDR HDBX button board with Speaker RGB LEDs
 
     //1p reader
     nod1.setrCode("ICCB",0);
@@ -352,7 +351,7 @@ void processRequest() {
     Node *rd = nodes[request[0] - node_id];//get the node to which the command is adressed
     byte answer[256];
     rd->processRequest(request, answer);//have it process the request
-    sendAnswer(answer);
+    if (answer[0]!=0) sendAnswer(answer); //hack because DDR spires have commands in which it does NOT respond to during an ACIO broadcast
 
 }
 

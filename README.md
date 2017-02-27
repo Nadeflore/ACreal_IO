@@ -23,7 +23,7 @@ jubeat copious - saucer (one new reader (no keypad) + one led board (game won't 
 
 DDR SN-SN2 (2 old slotted readers)
 
-DDR X-X3 (2 readers (old or new) in sd, 2 readers (old or new) + led board ? in HD)
+DDR X-X3 (2 readers (old or new) in sd, 2 readers (old or new) + HDXB button board and RGB speakers lights in HD)
 
 drum mania (1 old reader)
 
