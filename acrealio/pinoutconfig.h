@@ -1,7 +1,7 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#define GAMETYPE 1               //0:pop'n with card dispenser 1: pop'n, drummania(1 reader) 2:iidx/ddr sd/gf(2readers) 3:jubeat (1reader+Ledboard) 4: sdvx (1reader+ioboard) 5: ddr hd (2readers + ??? board)
+#define GAMETYPE 1               //0:pop'n with card dispenser 1: pop'n, drummania(1 reader) 2:iidx/ddr sd/gf(2readers) 3:jubeat (1reader+Ledboard) 4: sdvx (1reader+ioboard) 5: ddr hd (2readers + HDXB button board with speaker RGB lights)
 
 #define RFID_BAUD 115200		//Baud rate for RFID Module
 
@@ -49,6 +49,33 @@
 #define LED3_R 13
 #define LED3_G 12
 #define LED3_B 11
+
+//pins for ddr HDXB RGB LEDs (use PWM pins) and button lights
+#define LED_DDR_HDXB_P1S_R 4
+#define LED_DDR_HDXB_P1S_G 3
+#define LED_DDR_HDXB_P1S_B 2
+
+#define LED_DDR_HDXB_P2S_R 7
+#define LED_DDR_HDXB_P2S_G 6
+#define LED_DDR_HDXB_P2S_B 5
+
+#define LED_DDR_HDXB_P1W_R 10
+#define LED_DDR_HDXB_P1W_G 9
+#define LED_DDR_HDXB_P1W_B 8
+
+#define LED_DDR_HDXB_P2W_R 13
+#define LED_DDR_HDXB_P2W_G 12
+#define LED_DDR_HDXB_P2W_B 11
+
+
+#define LT_DDR_HDXB_P1_START 41
+#define LT_DDR_HDXB_P1_LR 43
+#define LT_DDR_HDXB_P1_UD 45
+
+#define LT_DDR_HDXB_P2_START 47
+#define LT_DDR_HDXB_P2_LR 49
+#define LT_DDR_HDXB_P2_UD 51
+
 
 
 
