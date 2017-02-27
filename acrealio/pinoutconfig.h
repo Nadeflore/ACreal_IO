@@ -51,21 +51,21 @@
 #define LED3_B 11
 
 //pins for ddr HDXB RGB LEDs (use PWM pins) and button lights
-#define LED_DDR_HDXB_P1S_R 2
-#define LED_DDR_HDXB_P1S_G 1
-#define LED_DDR_HDXB_P1S_B 0
+#define LED_DDR_HDXB_P1S_R 4
+#define LED_DDR_HDXB_P1S_G 3
+#define LED_DDR_HDXB_P1S_B 2
 
-#define LED_DDR_HDXB_P2S_R 5
-#define LED_DDR_HDXB_P2S_G 4
-#define LED_DDR_HDXB_P2S_B 3
+#define LED_DDR_HDXB_P2S_R 7
+#define LED_DDR_HDXB_P2S_G 6
+#define LED_DDR_HDXB_P2S_B 5
 
-#define LED_DDR_HDXB_P1W_R 8
-#define LED_DDR_HDXB_P1W_G 7
-#define LED_DDR_HDXB_P1W_B 6
+#define LED_DDR_HDXB_P1W_R 10
+#define LED_DDR_HDXB_P1W_G 9
+#define LED_DDR_HDXB_P1W_B 8
 
-#define LED_DDR_HDXB_P2W_R 11
-#define LED_DDR_HDXB_P2W_G 10
-#define LED_DDR_HDXB_P2W_B 9
+#define LED_DDR_HDXB_P2W_R 13
+#define LED_DDR_HDXB_P2W_G 12
+#define LED_DDR_HDXB_P2W_B 11
 
 
 #define LT_DDR_HDXB_P1_START 41
