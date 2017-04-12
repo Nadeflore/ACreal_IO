@@ -2,6 +2,7 @@
 #include "Reader.h"
 #include "LedBoard.h"
 #include "IoBoard.h"
+#include "SoftPWMRGB.h"
 #include "CardDispenser.h"
 #include "RR10.h"
 #include "SL015M.h"

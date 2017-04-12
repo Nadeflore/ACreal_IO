@@ -1,3 +1,6 @@
+#ifndef DDR_H
+#define DDR_H
+
 #include "Arduino.h"
 #include "Node.h"
 
@@ -14,4 +17,6 @@ public:
 private:
 
 };
+
+#endif
 
