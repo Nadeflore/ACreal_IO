@@ -18,24 +18,24 @@
 #define BT_B A3
 #define BT_C A4
 #define BT_D A5
-#define BT_START 50
-#define BT_TEST 52
-#define BT_SVC 40
+#define BT_START 52
+#define BT_TEST 50
+#define BT_SVC 48
 
 //input pins for volume encoders (phase A and phase B for each)
-#define VOLR_A 42
-#define VOLR_B 44
-#define VOLL_A 46
-#define VOLL_B 48
+#define VOLR_A 36
+#define VOLR_B 38
+#define VOLL_A 40
+#define VOLL_B 42
 
 //pins for sdvx lights (outputs)
 #define LT_START 53
 #define LT_A 51
 #define LT_B 49
 #define LT_C 47
-#define LT_D 45
-#define LT_FXL 43
-#define LT_FXR 41
+#define LT_D 43
+#define LT_FXL 41
+#define LT_FXR 39
 
 //pins for sdvx/jubeat RGB LEDs (use PWM pins)
 #define LED1_R 7
@@ -50,9 +50,17 @@
 #define LED3_G 12
 #define LED3_B 11
 
+#define LED4_R 4
+#define LED4_G 3
+#define LED4_B 2
 
+#define LED5_R 46
+#define LED5_G 45
+#define LED5_B 44
 
-
+#define LED6_R A8
+#define LED6_G A9
+#define LED6_B A10
 //pins for card reader 1 keypad (colls ABC, rows 1234)
 /*
 ### Keypad 3x4 Matrix ###

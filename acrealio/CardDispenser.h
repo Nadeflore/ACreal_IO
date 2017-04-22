@@ -1,3 +1,6 @@
+#ifndef CARDDISPENSER_H
+#define CARDDISPENSER_H
+
 #include "Arduino.h"
 #include "Node.h"
 
@@ -14,4 +17,6 @@ public:
 private:
 
 };
+
+#endif
 

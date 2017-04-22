@@ -1,3 +1,6 @@
+#ifndef IOBOARD_H
+#define IOBOARD_H
+
 #include "Arduino.h"
 #include "Node.h"
 
@@ -20,13 +23,15 @@ private:
     boolean test;
     boolean svc;
     //for volume encoders
-    int aVolRlast;
-    int bVolRlast;
     unsigned int volR;
-
-    int aVolLlast;
-    int bVolLlast;
+    byte volRState;
     unsigned int volL;
-
+    byte volLState;
+    // Values for the software PWM RGB light
+    int valLED6_R;
+    int valLED6_G;
+    int valLED6_B;
 };
+
+#endif
 

@@ -1,3 +1,6 @@
+#ifndef LEDBOARD_H
+#define LEDBOARD_H
+
 #include "Arduino.h"
 #include "Node.h"
 
@@ -15,4 +18,6 @@ private:
     byte ledStatus[18];
 
 };
+
+#endif
 
