@@ -3,8 +3,7 @@
 
 #include "Arduino.h"
 #include "Node.h"
-
-
+#include "SoftPWMRGB.h"
 
 class IoBoard: public Node
 {
@@ -27,6 +26,8 @@ private:
     byte volRState;
     unsigned int volL;
     byte volLState;
+    // Software PWM RGB light
+    SoftPWMRGB LED6;
     // Values for the software PWM RGB light
     int valLED6_R;
     int valLED6_G;

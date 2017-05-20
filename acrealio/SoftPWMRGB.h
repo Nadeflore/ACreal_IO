@@ -4,7 +4,8 @@
 class SoftPWMRGB
 {
 public:
-  SoftPWMRGB(int pinR, int pinG, int pinB);
+  SoftPWMRGB();
+  void setPins(int pinR, int pinG, int pinB);
   void setPWM(int valR, int valG, int valB); // Call this function in a loop to be sure that LED states are updated
     
 private:

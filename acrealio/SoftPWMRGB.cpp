@@ -1,13 +1,9 @@
 #include "Arduino.h"
 #include "SoftPWMRGB.h"
 
-SoftPWMRGB::SoftPWMRGB(int pinR, int pinG, int pinB)
+SoftPWMRGB::SoftPWMRGB()
 {
   period = 2000; // Period set to 2000us to obtain a 500Hz signal)
-  
-  pin[0] = pinR;
-  pin[1] = pinG;
-  pin[2] = pinB;
   
   for(int i=0;i<3;i++)
   {
@@ -18,6 +14,13 @@ SoftPWMRGB::SoftPWMRGB(int pinR, int pinG, int pinB)
     previousMicros[i] = 0;
     state[i] = LOW;
   }
+}
+
+void SoftPWMRGB::setPins(int pinR, int pinG, int pinB)
+{
+  pin[0] = pinR;
+  pin[1] = pinG;
+  pin[2] = pinB;
 }
 
 void SoftPWMRGB::setPWM(int valR, int valG, int valB)

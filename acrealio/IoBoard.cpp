@@ -1,9 +1,7 @@
 #include "Arduino.h"
 #include "IoBoard.h"
-#include "SoftPWMRGB.h"
 
 byte lightPin[] = {LT_START, LT_A, LT_B, LT_C, LT_D, LT_FXL, LT_FXR};
-SoftPWMRGB LED6(LED6_R, LED6_G, LED6_B);
 
 //contructor
 IoBoard::IoBoard(char* rCode)
@@ -84,6 +82,8 @@ void IoBoard::init()
     keys= 0x00;
     keysLights = 0x00;
     test =0;
+
+    LED6.setPins(LED6_R, LED6_G, LED6_B);
 
     valLED6_R = 0;
     valLED6_G = 0;
