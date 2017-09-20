@@ -6,11 +6,12 @@
 #include "RR10.h"
 #include "SL015M.h"
 #include "Ddr.h"
+#include "Sat.h"
 
 
 
 #define MINTIME 14                // Min time between 2 sent packet(Min is 14ms, Max is around 50ms) some games require this
-#define MAX_NODES 3
+#define MAX_NODES 7
 
 ///////////////////////////
 // Serial protocol with host
@@ -61,13 +62,17 @@ LedBoard nod2("LEDB");//led board
 Reader nod1;//first reader
 IoBoard nod2("KFCA");//io board
 
-#else //2 readers + DDR HDBX button board with Speaker RGB LEDs
+#elif GAMETYPE == 5 // 2 readers + DDR HDBX button board with Speaker RGB LEDs
 
 Reader nod1;//first reader
 
 Reader nod2;//second reader
 
 Ddr nod3; //HDXB board
+
+#elif GAMETYPE == 6 // satellites
+
+Sat monitor_satellite, left_inner_satellite, left_middle_satellite, left_outer_satellite, right_inner_satellite, right_middle_satellite, right_outer_satellite; //satellites
 
 #endif
 
@@ -102,8 +107,10 @@ void setup()
     // set nodes configuration
 
     //set first rfid module
+#if GAMETYPE !=6
     mod1.setPins(R1_DET,&R1_SER);
     nod1.setRfidModule(&mod1);
+#endif
 
 #if GAMETYPE == 0  //pop'n music with card dispenser
 
@@ -158,7 +165,8 @@ void setup()
 
     nbnodes = 2;
 
-#else // 2readers + DDR HDBX button board with Speaker RGB LEDs
+
+#elif GAMETYPE==5 // 2readers + DDR HDBX button board with Speaker RGB LEDs
 
     //1p reader
     nod1.setrCode("ICCB",0);
@@ -177,7 +185,17 @@ void setup()
     nodes[2] = &nod3;
 
     nbnodes = 3;
+    
+#elif GAMETYPE == 6 // ddr satellites
+    nodes[0] = &monitor_satellite;
+    nodes[1] = &left_inner_satellite;
+    nodes[2] = &left_middle_satellite;
+    nodes[3] = &left_outer_satellite;
+    nodes[4] = &right_inner_satellite;
+    nodes[5] = &right_middle_satellite;
+    nodes[6] = &right_outer_satellite;
 
+    nbnodes = 7;
 
 #endif
 
@@ -192,12 +210,8 @@ void setup()
 void loop()
 {
     if (initDone) {
-        for (int r=0;r<nbnodes;r++)
-        {
-            nodes[r]->update();//update each node
-        }
 
-        if ((millis() - lastRecv) > 50000) {    // If no comm for 50sec, timeout
+        if ((millis() - lastRecv) > 500000) {    // If no comm for 500sec, timeout
             initDone = false;                     // Reset init
             //digitalWrite(13, LOW);
             Serial.end();                         // and close serial port
@@ -235,10 +249,20 @@ void serialEvent() {
                     nodeEnum();
                 else
                 {
-                    if (request[0] >= node_id  && request[0] < node_id+nbnodes)//command recipient is one of our nodes
-                        processRequest();
-                    else //if it's not for us, (cmd aimed at another node or at the host) send it to next node
-                        forwardRequest();
+                    if (request[0] >= 0x10 && request[0] < 0x80 )
+                    {
+                      processBroadcast();
+                    }
+                    else 
+                    {
+                      if (request[0] >= node_id  && request[0] < node_id+nbnodes)//command recipient is one of our nodes
+                        {
+                          processRequest();
+                        }
+                      else //if it's not for us, (cmd aimed at another node or at the host) send it to next node
+                         { forwardRequest();
+                         }
+                    }
                 }
 
                 req_i = 0; //empty request buffer
@@ -318,11 +342,22 @@ void getRequest()
 //
 boolean isRequestComplete()
 {
+  
     if (req_i >= 6)               // check if at least minimum size
     {
-        if (req_i >= 6+ request[4]) // if long enough, including data length
+        if (request[0]>=0x10 && request[0]<0x80)
         {
-            return true;
+           if (req_i >= 3+ request[1]) // if long enough, including data length
+          {
+              return true;
+          }
+        }
+        else
+        {
+          if (req_i >= 6+ request[4]) // if long enough, including data length
+          {
+              return true;
+          }
         }
     }
     return false;
@@ -336,6 +371,12 @@ boolean checkRequestChecksum()
     byte sum = 0;
     int bufsize = 6 + request[4];
 
+    //broadcast checksum length
+    if (request[0]>=0x10 && request[0]<0x80)
+    {
+       bufsize= 3+ request[1];
+    }
+    
     for (int i=0;i<bufsize-1;i++)
     {
         sum += request[i];
@@ -352,6 +393,25 @@ void processRequest() {
     byte answer[256];
     rd->processRequest(request, answer);//have it process the request
     if (answer[0]!=0) sendAnswer(answer); //hack because DDR spires have commands in which it does NOT respond to during an ACIO broadcast
+
+}
+
+void processBroadcast() {
+    byte answer[256];
+    answer[0]=request[0];
+    int nodes_in_broadcast = request[0]>>4;
+    answer[1]=2*nodes_in_broadcast;
+    int answer_size=2;
+    int device_packet_size= (request[1]/nodes_in_broadcast);
+    byte individual_device_broadcast_buffer[40]; 
+    Node *rd;
+    for (int i=0;i<nodes_in_broadcast;i++)
+    {
+      memcpy(individual_device_broadcast_buffer,request+2+(i*device_packet_size),device_packet_size);
+      rd=nodes[i];
+      answer_size+=rd->processBroadcast(individual_device_broadcast_buffer,device_packet_size,answer+answer_size);
+    }
+    sendAnswer(answer);
 
 }
 
@@ -373,6 +433,10 @@ void sendAnswer(byte* answer)
     // checksum calculation
     byte sum = 0;
     int bufsize = 6 + answer[4];
+    if (request[0]>=0x10 && request[0]<0x80)
+    {
+       bufsize= 3+ answer[1];
+    }
 
     for (int i=0;i<bufsize-1;i++)
     {
@@ -394,8 +458,14 @@ void sendAnswer(byte* answer)
 
 
 
-
-    Serial.write(0xAA);
+    if (request[0]>=0x10 && request[0]<0x80)
+    {
+      Serial.write(0xAA);
+    }
+    else
+    {
+      Serial.write(0xAA);
+    }
 
     for (int i=0;i<bufsize;i++)
     {
