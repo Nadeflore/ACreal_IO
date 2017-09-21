@@ -244,7 +244,7 @@ void serialEvent() {
                     nodeEnum();
                 else
                 {
-                    if (request[0] >= 0x10 && request[0] < 0x80 )
+                    if (request[0] >= 0x10 && request[0] < 0x80 ) //if our destination is a broadcast
                     {
                       processBroadcast();
                     }
@@ -340,14 +340,14 @@ boolean isRequestComplete()
   
     if (req_i >= 6)               // check if at least minimum size
     {
-        if (request[0]>=0x10 && request[0]<0x80)
+        if (request[0]>=0x10 && request[0]<0x80) //broadcast style
         {
            if (req_i >= 3+ request[1]) // if long enough, including data length
           {
               return true;
           }
         }
-        else
+        else //request style
         {
           if (req_i >= 6+ request[4]) // if long enough, including data length
           {
@@ -364,9 +364,11 @@ boolean isRequestComplete()
 boolean checkRequestChecksum()
 {
     byte sum = 0;
+
+    //request style
     int bufsize = 6 + request[4];
 
-    //broadcast checksum length
+    //broadcast checksum length override if it is a broadcast
     if (request[0]>=0x10 && request[0]<0x80)
     {
        bufsize= 3+ request[1];
@@ -392,19 +394,20 @@ void processRequest() {
 }
 
 void processBroadcast() {
-    byte answer[256];
-    answer[0]=request[0];
-    int nodes_in_broadcast = request[0]>>4;
-    answer[1]=2*nodes_in_broadcast;
-    int answer_size=2;
-    int device_packet_size= (request[1]/nodes_in_broadcast);
-    byte individual_device_broadcast_buffer[40]; 
-    Node *rd;
+    byte answer[256]; // broadcast answer buffer
+    answer[0]=request[0]; // standard affair for an answer
+    int nodes_in_broadcast = request[0]>>4; // shift the high nibble of the node address right to get an integer of how many nodes are in the broadcast
+    answer[1]=2*nodes_in_broadcast; // this is the length; AFAIK, every broadcast node returns FE 00, so 2 bytes times the number of nodes is our payload length
+    int answer_size=2; // so far we defined 2 bytes in our answer
+    int device_packet_size= (request[1]/nodes_in_broadcast); // a broadcast supposedly has a fixed size payload across every node? Divide the length of the payload by number of nodes to get the length of a nodes payload
+    //byte individual_device_broadcast_buffer[40];
     for (int i=0;i<nodes_in_broadcast;i++)
     {
-      memcpy(individual_device_broadcast_buffer,request+2+(i*device_packet_size),device_packet_size);
-      rd=nodes[i];
-      answer_size+=rd->processBroadcast(individual_device_broadcast_buffer,device_packet_size,answer+answer_size);
+      //memcpy(individual_device_broadcast_buffer,request+2+(i*device_packet_size),device_packet_size);
+      //answer_size+=rd->processBroadcast(individual_device_broadcast_buffer,device_packet_size,answer+answer_size);
+      
+      //use the magic of pointers to avoid needless allocation and copy!
+      answer_size+=nodes[i]->processBroadcast(request+2+(i*device_packet_size),device_packet_size,answer+answer_size);
     }
     sendAnswer(answer);
 
