@@ -111,8 +111,8 @@ COL C  COL B  COL A
 #define K1_4 35
 
 
-//if not satellites
-#if GAMETYPE!=6
+//if not something that can run on an uno (like satellites)
+#if GAMETYPE<6
   //pins for card reader 1 RFID Module
   #define R1_DET 20
   #define R1_SER Serial1
@@ -130,11 +130,6 @@ COL C  COL B  COL A
 #define K2_2 30
 #define K2_3 32
 #define K2_4 34
-
-
-#if GAMETYPE!=6
-
-#endif
 
 #endif
 

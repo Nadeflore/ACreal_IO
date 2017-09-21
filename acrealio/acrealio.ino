@@ -13,6 +13,9 @@
 #define MINTIME 14                // Min time between 2 sent packet(Min is 14ms, Max is around 50ms) some games require this
 #define MAX_NODES 7
 
+
+
+
 ///////////////////////////
 // Serial protocol with host
 ///////////////////////////
@@ -78,22 +81,14 @@ Sat monitor_satellite, left_inner_satellite, left_middle_satellite, left_outer_s
 
 
 //1P rfid module allocation
+RFID_MODULE1_TYPE mod1;
 
-#if RFID_MODULE1 == 1
-SL015M mod1;
-#else
-RR10 mod1;
-#endif
 
 
 
 //2P rfid module allocation
 #if GAMETYPE == 2 || GAMETYPE == 5
-#if RFID_MODULE2 == 1
-SL015M mod2;
-#else
-RR10 mod2;
-#endif
+  RFID_MODULE2_TYPE mod2;
 #endif
 
 
@@ -457,15 +452,18 @@ void sendAnswer(byte* answer)
     }
 
 
+/* 
+ *  Packet captures indicate a broadcast does NOT send an extra 0xAA in front here, 
+ *  but leaving this as is seems to be fine -- commented out for now
+ *  
+ *  //if not a broadcast...
+    if (!(request[0]>=0x10 && request[0]<0x80))
+    {
+      Serial.write(0xAA);
+    }
+    */
 
-    if (request[0]>=0x10 && request[0]<0x80)
-    {
-      Serial.write(0xAA);
-    }
-    else
-    {
-      Serial.write(0xAA);
-    }
+    Serial.write(0xAA);
 
     for (int i=0;i<bufsize;i++)
     {
