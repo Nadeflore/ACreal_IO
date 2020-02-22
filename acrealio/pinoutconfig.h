@@ -5,8 +5,8 @@
 
 #define RFID_BAUD 115200		//Baud rate for RFID Module
 
-#define RFID_MODULE1 1			//Rfid module used for reader1, 1:SL015M 2:RR10
-#define RFID_MODULE2 1			//Rfid module used for reader2, 1:SL015M 2:RR10
+#define RFID_MODULE1 3			//Rfid module used for reader1, 1:SL015M 2:RR10 3:PN5180
+#define RFID_MODULE2 3			//Rfid module used for reader2, 1:SL015M 2:RR10 3:PN5180
 
 #define SDVX_VOL_SENS 7        //Sensitivity for SDVX Volume buttons
 
@@ -103,6 +103,11 @@ COL C  COL B  COL A
 //pins for card reader 2 RFID Module
 #define R2_DET 21
 #define R2_SER Serial2
+
+//pins for PN5180 RFID Module
+#define PN5180_NSS_PIN  10
+#define PN5180_BUSY_PIN 9
+#define PN5180_RST_PIN  7
 
 #endif
 
