@@ -217,7 +217,7 @@ bool PN5180::writeEEprom(uint8_t addr, uint8_t *buffer, uint8_t len) {
  * not go beyond EEPROM address 254. If the condition is not fulfilled, an exception is
  * raised.
  */
-bool PN5180::readEEprom(uint8_t addr, uint8_t *buffer, int len) {
+bool PN5180::readEEprom(uint8_t addr, uint8_t *buffer, uint8_t len) {
   if ((addr > 254) || ((addr+len) > 254)) {
     PN5180DEBUG(F("ERROR: Reading beyond addr 254!\n"));
     return false;
