@@ -354,6 +354,20 @@ short Reader::processRequest(byte* request, byte* answer)
             answer[5] = 0x00;//no card
             answer[6] = 0x00;
             break;
+        case 3: 
+            //hack: behaves like 0 (for Nostalgia) and 1 (for Beatstream) alternatively
+            static byte l_cmd61 = 0;
+            l_cmd61 = 1 - l_cmd61;
+            if (l_cmd61)
+            {
+              answer[4] = 1;
+              answer[5] = 0x01;
+            }
+            else
+            {
+              answer[4] = 0;
+            }
+            break;
         default:
             answer[4] = 0;
         }

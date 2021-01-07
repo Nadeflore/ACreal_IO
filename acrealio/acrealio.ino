@@ -58,7 +58,7 @@ Reader nod2;//second reader
 Reader nod1;//first reader
 LedBoard nod2("LEDB");//led board
 
-#elif GAMETYPE == 4 // reader + ioboard
+#elif GAMETYPE == 4 || GAMETYPE == 5 // reader + ioboard
 
 Reader nod1;//first reader
 IoBoard nod2("KFCA");//io board
@@ -88,7 +88,7 @@ PN5180Reader mod1;
 
 
 //2P rfid module allocation
-#if GAMETYPE == 2 || GAMETYPE == 5
+#if GAMETYPE == 2 || GAMETYPE == 6
 #if RFID_MODULE2 == 1
 SL015M mod2;
 #elif RFID_MODULE2 == 2
@@ -165,6 +165,15 @@ void setup()
 
     nbnodes = 2;
 
+#elif GAMETYPE == 5 // Beatstream/Nostalgia: KFCA ioboard + ICCC reader
+
+    //1p reader
+    nod1.setrCode("ICCC",3);
+    nodes[0] = &nod2; //KFCA first
+    nodes[1] = &nod1;
+
+    nbnodes = 2;
+    
 #else // 2readers + DDR ??? board
 
     //1p reader
@@ -429,7 +438,7 @@ void sendAnswer(byte* answer)
 //
 long detRate()
 {
-    long baudrates[] = {57600,38400,19200};//baudrates to try
+    long baudrates[] = {57600,38400,19200,115200};//baudrates to try
     int i=0;
     boolean allAA;
 

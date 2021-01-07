@@ -8,7 +8,7 @@
 class IoBoard: public Node
 {
 public:
-    IoBoard(char* rCode); //contructor
+    IoBoard(const char* rCode); //contructor
     void init();
     short processRequest(byte* request, byte* sendBuff);
     void update();
