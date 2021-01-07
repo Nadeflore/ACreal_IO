@@ -7,9 +7,8 @@
 #include "RR10.h"
 #include "SL015M.h"
 #include "PN5180Reader.h"
+#include "StaticReader.h"
 #include "Ddr.h"
-
-
 
 #define MINTIME 14                // Min time between 2 sent packet(Min is 14ms, Max is around 50ms) some games require this
 #define MAX_NODES 3
@@ -83,6 +82,8 @@ SL015M mod1;
 RR10 mod1;
 #elif RFID_MODULE1 == 3
 PN5180Reader mod1;
+#elif RFID_MODULE1 == 4
+StaticReader mod1;
 #endif
 
 
@@ -95,6 +96,8 @@ SL015M mod2;
 RR10 mod2;
 #elif RFID_MODULE2 == 3
 PN5180Reader mod2;
+#elif RFID_MODULE2 == 4
+StaticReader mod2;
 #endif
 #endif
 
@@ -465,4 +468,3 @@ long detRate()
 
     return baudrates[i];
 }
-
