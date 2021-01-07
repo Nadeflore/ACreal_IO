@@ -31,12 +31,14 @@ guitar freaks (2 old readers)
 
 Sound voltex (1 new wavepass reader + 1 IoBoard)
 
+Beatstream (1 IoBoard + 1 new wavepass reader)
+
 Nostalgia (1 IoBoard + 1 new wavepass reader)
 
 How to use
 ----------
 
-Flash the firmware on an arduino mega 2560, scratch the "reset-en" bridge on the pcb, change COM port to COM1 (COM2 for Nostalgia)
+Flash the firmware on an arduino mega 2560, scratch the "reset-en" bridge on the pcb, change COM port to COM1 (COM2 for Beatstream/Nostalgia)
 
 PN5180 support
 --------------

@@ -165,10 +165,10 @@ void setup()
 
     nbnodes = 2;
 
-#elif GAMETYPE == 5 // Nostalgia: KFCA ioboard + ICCC reader
+#elif GAMETYPE == 5 // Beatstream/Nostalgia: KFCA ioboard + ICCC reader
 
     //1p reader
-    nod1.setrCode("ICCC",0);
+    nod1.setrCode("ICCC",3);
     nodes[0] = &nod2; //KFCA first
     nodes[1] = &nod1;
 
