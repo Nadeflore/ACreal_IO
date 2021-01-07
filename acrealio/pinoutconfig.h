@@ -5,8 +5,8 @@
 
 #define RFID_BAUD 115200		//Baud rate for RFID Module
 
-#define RFID_MODULE1 3			//Rfid module used for reader1, 1:SL015M 2:RR10 3:PN5180
-#define RFID_MODULE2 3			//Rfid module used for reader2, 1:SL015M 2:RR10 3:PN5180
+#define RFID_MODULE1 4			//Rfid module used for reader1, 1:SL015M 2:RR10 3:PN5180 4:Static
+#define RFID_MODULE2 4			//Rfid module used for reader2, 1:SL015M 2:RR10 3:PN5180 4:Static
 
 #define SDVX_VOL_SENS 7        //Sensitivity for SDVX Volume buttons
 
@@ -108,6 +108,14 @@ COL C  COL B  COL A
 #define PN5180_NSS_PIN  10
 #define PN5180_BUSY_PIN 9
 #define PN5180_RST_PIN  7
+
+//Static RFID Module configuration
+//button to trigger a card scan
+#define STATIC_SCAN_PIN A15
+//card type (1 for ISO15693, 2 for FeliCa)
+#define STATIC_TYPE 1
+//card UID
+#define STATIC_UID {0xE0,0x04,0xAA,0xBB,0xCC,0xDD,0xEE,0xFF}
 
 #endif
 
